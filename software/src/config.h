@@ -43,9 +43,8 @@
 #define MAX_VOLTAGE 3300
 
 #define PIN_ANALOG (BS->pin1_ad)
-#define PIN_ENABLE (BS->pin2_da)
-#define PIN_SWITCH_SENSOR (BS->pin3_pwm)
-#define PIN_SWITCH_VCC (BS->pin4_io)
+#define PIN_TRIGGER (BS->pin2_da)
+#define PIN_DEPLEATE_CAP (BS->pin4_io)
 
 #define BOARD_MCK 64000000
 
@@ -78,7 +77,6 @@ typedef struct {
 
 	uint8_t state;
 	uint8_t state_counter;
-	uint16_t last_vcc;
 	uint16_t last_distance;
 
 	uint32_t tick;

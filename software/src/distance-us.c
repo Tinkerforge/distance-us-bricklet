@@ -62,58 +62,22 @@ void invocation(const ComType com, const uint8_t *data) {
 	}
 }
 
-// TODO: Change to new sensor type when prototype arrives
 void constructor(void) {
-	PIN_ENABLE.type = PIO_INPUT;
-	PIN_ENABLE.attribute = PIO_DEFAULT;
-	BA->PIO_Configure(&PIN_ENABLE, 1);
+	BC->state = STATE_ANALOG_LOW;
 
-    PIN_SWITCH_SENSOR.type = PIO_OUTPUT_0;
-    BA->PIO_Configure(&PIN_SWITCH_SENSOR, 1);
+	PIN_ANALOG.type = PIO_INPUT;
+	PIN_ANALOG.attribute = PIO_DEFAULT;
+	BA->PIO_Configure(&PIN_ANALOG, 1);
 
-	while(true) {
-		adc_channel_disable(BS->adc_channel);
-		PIN_ANALOG.type = PIO_OUTPUT_0;
-		PIN_ANALOG.attribute = PIO_DEFAULT;
-		BA->PIO_Configure(&PIN_ANALOG, 1);
-		SLEEP_MS(6);
+	PIN_TRIGGER.type = PIO_OUTPUT_0;
+	PIN_TRIGGER.attribute = PIO_DEFAULT;
+	BA->PIO_Configure(&PIN_TRIGGER, 1);
 
-	    PIN_SWITCH_SENSOR.type = PIO_OUTPUT_1;
-	    BA->PIO_Configure(&PIN_SWITCH_SENSOR, 1);
-	    SLEEP_MS(1);
-	    PIN_SWITCH_SENSOR.type = PIO_OUTPUT_0;
-	    BA->PIO_Configure(&PIN_SWITCH_SENSOR, 1);
-
-		PIN_ANALOG.type = PIO_DEFAULT;
-		PIN_ANALOG.attribute = PIO_DEFAULT;
-		BA->PIO_Configure(&PIN_ANALOG, 1);
-		adc_channel_enable(BS->adc_channel);
-
-		while(!(PIN_ENABLE.pio->PIO_PDSR & PIN_ENABLE.mask));
-		while(PIN_ENABLE.pio->PIO_PDSR & PIN_ENABLE.mask);
-		SLEEP_MS(50);
-		BA->printf("value: %d\n\r", BA->adc_channel_get_data(BS->adc_channel));
-
-	}
-
+	PIN_DEPLEATE_CAP.type = PIO_OUTPUT_1;
+	PIN_DEPLEATE_CAP.attribute = PIO_DEFAULT;
+	BA->PIO_Configure(&PIN_DEPLEATE_CAP, 1);
 
 	adc_channel_enable(BS->adc_channel);
-
-    PIN_ANALOG.type = PIO_INPUT;
-    PIN_ANALOG.attribute = PIO_DEFAULT;
-    BA->PIO_Configure(&PIN_ANALOG, 1);
-
-    PIN_ENABLE.type = PIO_OUTPUT_1;
-    BA->PIO_Configure(&PIN_ENABLE, 1);
-
-    PIN_SWITCH_SENSOR.type = PIO_OUTPUT_0;
-    BA->PIO_Configure(&PIN_SWITCH_SENSOR, 1);
-
-    PIN_SWITCH_VCC.type = PIO_OUTPUT_1;
-    BA->PIO_Configure(&PIN_SWITCH_VCC, 1);
-
-    BC->state = STATE_WAIT_VCC;
-    BC->state_counter = 2;
 
 	simple_constructor();
 }
@@ -125,17 +89,9 @@ void destructor(void) {
 	PIN_ANALOG.attribute = PIO_PULLUP;
     BA->PIO_Configure(&PIN_ANALOG, 1);
 
-    PIN_ENABLE.type = PIO_INPUT;
-    PIN_ENABLE.attribute = PIO_PULLUP;
-    BA->PIO_Configure(&PIN_ENABLE, 1);
-
-    PIN_SWITCH_SENSOR.type = PIO_INPUT;
-    PIN_SWITCH_SENSOR.attribute = PIO_PULLUP;
-    BA->PIO_Configure(&PIN_SWITCH_SENSOR, 1);
-
-    PIN_SWITCH_VCC.type = PIO_INPUT;
-    PIN_SWITCH_VCC.attribute = PIO_PULLUP;
-    BA->PIO_Configure(&PIN_SWITCH_VCC, 1);
+    PIN_TRIGGER.type = PIO_INPUT;
+    PIN_TRIGGER.attribute = PIO_PULLUP;
+    BA->PIO_Configure(&PIN_TRIGGER, 1);
 
 	adc_channel_disable(BS->adc_channel);
 }
@@ -145,65 +101,78 @@ int32_t analog_value_from_mc(const int32_t value) {
 }
 
 int32_t distance_from_analog_value(const int32_t value) {
+	int32_t ret_value = BC->last_distance;
+
 	switch(BC->state) {
-		case STATE_WAIT_VCC: {
+		case STATE_ANALOG_LOW: {
 			if(BC->state_counter == 0) {
-				BC->state = STATE_VCC;
+				PIN_DEPLEATE_CAP.type = PIO_OUTPUT_0;
+				BA->PIO_Configure(&PIN_DEPLEATE_CAP, 1);
+
+				PIN_TRIGGER.type = PIO_OUTPUT_0;
+			    BA->PIO_Configure(&PIN_TRIGGER, 1);
+
+			    SLEEP_US(10);
+
+			    PIN_TRIGGER.type = PIO_OUTPUT_1;
+			    BA->PIO_Configure(&PIN_TRIGGER, 1);
+
+			    adc_channel_enable(BS->adc_channel);
+
+				BC->state = STATE_ANALOG_MEASURE;
+				BC->state_counter = 25;
+
+
+				break;
+
+				BC->state = STATE_TRIGGER_LOW;
+				BC->state_counter = 0;
 			} else {
 				BC->state_counter--;
 			}
 			break;
 		}
 
-		case STATE_VCC: {
-			BC->state_counter = 2;
-			BC->last_vcc = value;
-			BC->state = STATE_WAIT_ANALOG;
-
-		    PIN_SWITCH_VCC.type = PIO_OUTPUT_0;
-		    BA->PIO_Configure(&PIN_SWITCH_VCC, 1);
-
-		    PIN_SWITCH_SENSOR.type = PIO_OUTPUT_1;
-		    BA->PIO_Configure(&PIN_SWITCH_SENSOR, 1);
-			break;
-		}
-
-		case STATE_WAIT_ANALOG: {
+		case STATE_TRIGGER_LOW: {
 			if(BC->state_counter == 0) {
-				BC->state = STATE_ANALOG;
+			    PIN_TRIGGER.type = PIO_OUTPUT_1;
+			    BA->PIO_Configure(&PIN_TRIGGER, 1);
+
+			    adc_channel_enable(BS->adc_channel);
+
+				BC->state = STATE_ANALOG_MEASURE;
+				BC->state_counter = 25;
 			} else {
 				BC->state_counter--;
 			}
 			break;
 		}
 
-		case STATE_ANALOG: {
-			// vcc = vcc_value*3300*1680/(4095*1000)
-			// analog = analog_value*3300/4095
-			// cm = analog/(vcc/1024)
-			const uint32_t vcc = ((uint32_t)BC->last_vcc)*3300*168/(4095*100);
-			const uint32_t analog = value*3300/4095;
-			BC->last_distance = analog*1024/vcc;
+		case STATE_ANALOG_MEASURE: {
+			if(BC->state_counter == 0) {
+				ret_value = BA->adc_channel_get_data(BS->adc_channel);
+				BA->printf("value: %d\n\r", ret_value);
+			    adc_channel_disable(BS->adc_channel);
 
-			BA->printf("values: %d %d, %d %d -> %d\n\r", BC->last_vcc, value, vcc, analog, BC->last_distance);
+			    PIN_DEPLEATE_CAP.type = PIO_OUTPUT_1;
+				BA->PIO_Configure(&PIN_DEPLEATE_CAP, 1);
 
-			BC->state_counter = 2;
-			BC->state = STATE_WAIT_VCC;
-
-		    PIN_SWITCH_SENSOR.type = PIO_OUTPUT_0;
-		    BA->PIO_Configure(&PIN_SWITCH_SENSOR, 1);
-
-		    PIN_SWITCH_VCC.type = PIO_OUTPUT_1;
-		    BA->PIO_Configure(&PIN_SWITCH_VCC, 1);
+				BC->state = STATE_ANALOG_LOW;
+				BC->state_counter = 1;
+			} else {
+				BC->state_counter--;
+			}
 			break;
 		}
 
 		default: {
+			BC->state = STATE_ANALOG_LOW;
 			break; // TODO: Error?
 		}
 	}
 
-	return BC->last_distance;
+	BC->last_distance = ret_value;
+	return ret_value;
 }
 
 void tick(const uint8_t tick_type) {
