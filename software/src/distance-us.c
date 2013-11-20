@@ -151,7 +151,6 @@ int32_t distance_from_analog_value(const int32_t value) {
 		case STATE_ANALOG_MEASURE: {
 			if(BC->state_counter == 0) {
 				ret_value = BA->adc_channel_get_data(BS->adc_channel);
-				BA->printf("value: %d\n\r", ret_value);
 			    adc_channel_disable(BS->adc_channel);
 
 			    PIN_DEPLEATE_CAP.type = PIO_OUTPUT_1;

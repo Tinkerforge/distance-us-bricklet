@@ -43,8 +43,8 @@
 #define MAX_VOLTAGE 3300
 
 #define PIN_ANALOG (BS->pin1_ad)
-#define PIN_TRIGGER (BS->pin2_da)
-#define PIN_DEPLEATE_CAP (BS->pin4_io)
+#define PIN_TRIGGER (BS->pin3_pwm)
+#define PIN_DEPLEATE_CAP (BS->pin2_da)
 
 #define BOARD_MCK 64000000
 
