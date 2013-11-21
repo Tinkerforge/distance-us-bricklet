@@ -27,8 +27,6 @@
 
 #define STATE_ANALOG_LOW       0
 #define STATE_ANALOG_MEASURE   1
-#define STATE_TRIGGER_LOW      2
-
 
 #define FID_GET_DISTANCE 1
 #define FID_GET_ANALOG_VALUE 2

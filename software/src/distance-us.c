@@ -121,27 +121,6 @@ int32_t distance_from_analog_value(const int32_t value) {
 
 				BC->state = STATE_ANALOG_MEASURE;
 				BC->state_counter = 25;
-
-
-				break;
-
-				BC->state = STATE_TRIGGER_LOW;
-				BC->state_counter = 0;
-			} else {
-				BC->state_counter--;
-			}
-			break;
-		}
-
-		case STATE_TRIGGER_LOW: {
-			if(BC->state_counter == 0) {
-			    PIN_TRIGGER.type = PIO_OUTPUT_1;
-			    BA->PIO_Configure(&PIN_TRIGGER, 1);
-
-			    adc_channel_enable(BS->adc_channel);
-
-				BC->state = STATE_ANALOG_MEASURE;
-				BC->state_counter = 25;
 			} else {
 				BC->state_counter--;
 			}
