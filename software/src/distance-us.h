@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include "bricklib/com/com_common.h"
 
-#define MOVING_AVERAGE_DEFAULT 100
+#define MOVING_AVERAGE_DEFAULT 20
 #define MOVING_AVERAGE_MAX 100
 
 #define STATE_ANALOG_LOW       0

@@ -120,7 +120,7 @@ void destructor(void) {
 }
 
 int32_t distance_from_analog_value(const int32_t value) {
-	int32_t analog_data = BC->last_distance_value;
+	int32_t ret_value = BC->last_distance_value;
 
 	switch(BC->state) {
 		case STATE_ANALOG_LOW: {
@@ -148,11 +148,24 @@ int32_t distance_from_analog_value(const int32_t value) {
 
 		case STATE_ANALOG_MEASURE: {
 			if(BC->state_counter == 0) {
-				analog_data = BA->adc_channel_get_data(BS->adc_channel);
-			    adc_channel_disable(BS->adc_channel);
+				int32_t analog_data = BA->adc_channel_get_data(BS->adc_channel);
+				adc_channel_disable(BS->adc_channel);
 
-			    PIN_DEPLEATE_CAP.type = PIO_OUTPUT_1;
+				PIN_DEPLEATE_CAP.type = PIO_OUTPUT_1;
 				BA->PIO_Configure(&PIN_DEPLEATE_CAP, 1);
+
+				if (BC->moving_average_num > 0) {
+					BC->moving_average_sum = BC->moving_average_sum -
+					                         BC->moving_average[BC->moving_average_tick] +
+					                         analog_data;
+
+					BC->moving_average[BC->moving_average_tick] = analog_data;
+					BC->moving_average_tick = (BC->moving_average_tick + 1) % BC->moving_average_num;
+
+					ret_value = (BC->moving_average_sum + BC->moving_average_num/2)/BC->moving_average_num;
+				} else {
+					ret_value = analog_data;
+				}
 
 				BC->state = STATE_ANALOG_LOW;
 				BC->state_counter = 1;
@@ -168,23 +181,8 @@ int32_t distance_from_analog_value(const int32_t value) {
 		}
 	}
 
-	BC->last_distance_value = analog_data;
-	
-	BA->printf("LDV  %d\n\r", analog_data);
-	
-	if (BC->moving_average_num > 0) {
-		BC->moving_average_sum = BC->moving_average_sum -
-		                         BC->moving_average[BC->moving_average_tick] +
-		                         analog_data;
-
-		BC->moving_average[BC->moving_average_tick] = analog_data;
-		BC->moving_average_tick = (BC->moving_average_tick + 1) % BC->moving_average_num;
-
-		BA->printf("LMAV %d\n\r", (BC->moving_average_sum + BC->moving_average_num/2)/BC->moving_average_num);
-		return (BC->moving_average_sum + BC->moving_average_num/2)/BC->moving_average_num;
-	} else {
-		return analog_data;
-	}
+	BC->last_distance_value = ret_value;
+	return ret_value;
 }
 
 void set_moving_average(const ComType com, const SetMovingAverage *data) {
