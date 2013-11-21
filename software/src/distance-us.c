@@ -28,42 +28,58 @@
 #include "brickletlib/bricklet_simple.h"
 #include "config.h"
 
-#define SIMPLE_UNIT_ANALOG_VALUE 0
-#define SIMPLE_UNIT_DISTANCE 1
+#define SIMPLE_UNIT_DISTANCE 0
 
 const SimpleMessageProperty smp[] = {
-	{SIMPLE_UNIT_DISTANCE, SIMPLE_TRANSFER_VALUE, SIMPLE_DIRECTION_GET}, // TYPE_GET_DISTANCE
-	{SIMPLE_UNIT_ANALOG_VALUE, SIMPLE_TRANSFER_VALUE, SIMPLE_DIRECTION_GET}, // TYPE_GET_ANALOG_VALUE
+	{SIMPLE_UNIT_DISTANCE, SIMPLE_TRANSFER_VALUE, SIMPLE_DIRECTION_GET}, // TYPE_GET_DISTANCE_VALUE
 	{SIMPLE_UNIT_DISTANCE, SIMPLE_TRANSFER_PERIOD, SIMPLE_DIRECTION_SET}, // TYPE_SET_DISTANCE_CALLBACK_PERIOD
 	{SIMPLE_UNIT_DISTANCE, SIMPLE_TRANSFER_PERIOD, SIMPLE_DIRECTION_GET}, // TYPE_GET_DISTANCE_CALLBACK_PERIOD
-	{SIMPLE_UNIT_ANALOG_VALUE, SIMPLE_TRANSFER_PERIOD, SIMPLE_DIRECTION_SET}, // TYPE_SET_ANALOG_VALUE_CALLBACK_PERIOD
-	{SIMPLE_UNIT_ANALOG_VALUE, SIMPLE_TRANSFER_PERIOD, SIMPLE_DIRECTION_GET}, // TYPE_GET_ANALOG_VALUE_CALLBACK_PERIOD
 	{SIMPLE_UNIT_DISTANCE, SIMPLE_TRANSFER_THRESHOLD, SIMPLE_DIRECTION_SET}, // TYPE_SET_DISTANCE_CALLBACK_THRESHOLD
 	{SIMPLE_UNIT_DISTANCE, SIMPLE_TRANSFER_THRESHOLD, SIMPLE_DIRECTION_GET}, // TYPE_GET_DISTANCE_CALLBACK_THRESHOLD
-	{SIMPLE_UNIT_ANALOG_VALUE, SIMPLE_TRANSFER_THRESHOLD, SIMPLE_DIRECTION_SET}, // TYPE_SET_ANALOG_VALUE_CALLBACK_THRESHOLD
-	{SIMPLE_UNIT_ANALOG_VALUE, SIMPLE_TRANSFER_THRESHOLD, SIMPLE_DIRECTION_GET}, // TYPE_GET_ANALOG_VALUE_CALLBACK_THRESHOLD
 	{0, SIMPLE_TRANSFER_DEBOUNCE, SIMPLE_DIRECTION_SET}, // TYPE_SET_DEBOUNCE_PERIOD
 	{0, SIMPLE_TRANSFER_DEBOUNCE, SIMPLE_DIRECTION_GET}, // TYPE_GET_DEBOUNCE_PERIOD
 };
 
 const SimpleUnitProperty sup[] = {
-	{analog_value_from_mc, SIMPLE_SIGNEDNESS_UINT, FID_ANALOG_VALUE, FID_ANALOG_VALUE_REACHED, SIMPLE_UNIT_ANALOG_VALUE}, // analog value
-	{distance_from_analog_value, SIMPLE_SIGNEDNESS_INT, FID_DISTANCE, FID_DISTANCE_REACHED, SIMPLE_UNIT_ANALOG_VALUE}, // distance
+	{distance_from_analog_value, SIMPLE_SIGNEDNESS_INT, FID_DISTANCE, FID_DISTANCE_REACHED, SIMPLE_UNIT_DISTANCE}, // distance
 };
 
 const uint8_t smp_length = sizeof(smp);
 
-
 void invocation(const ComType com, const uint8_t *data) {
-	simple_invocation(com, data);
+	switch(((MessageHeader*)data)->fid) {
+		case FID_GET_DISTANCE_VALUE:
+		case FID_SET_DISTANCE_CALLBACK_PERIOD:
+		case FID_GET_DISTANCE_CALLBACK_PERIOD:
+		case FID_SET_DISTANCE_CALLBACK_THRESHOLD:
+		case FID_GET_DISTANCE_CALLBACK_THRESHOLD:
+		case FID_SET_DEBOUNCE_PERIOD:
+		case FID_GET_DEBOUNCE_PERIOD: {
+			simple_invocation(com, data);
+			break;
+		}
 
-	if(((MessageHeader*)data)->fid > FID_LAST) {
-		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
+		case FID_SET_MOVING_AVERAGE: {
+			set_moving_average(com, (SetMovingAverage*)data);
+			break;
+		}
+
+		case FID_GET_MOVING_AVERAGE: {
+			get_moving_average(com, (GetMovingAverage*)data);
+			break;
+		}
+
+		default: {
+			BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
+			break;
+		}
 	}
 }
 
 void constructor(void) {
 	BC->state = STATE_ANALOG_LOW;
+	BC->state_counter = 0;
+	BC->last_distance_value = 0;
 
 	PIN_ANALOG.type = PIO_INPUT;
 	PIN_ANALOG.attribute = PIO_DEFAULT;
@@ -78,6 +94,13 @@ void constructor(void) {
 	BA->PIO_Configure(&PIN_DEPLEATE_CAP, 1);
 
 	adc_channel_enable(BS->adc_channel);
+
+	BC->moving_average_sum = 0;
+	BC->moving_average_tick = 0;
+	BC->moving_average_num = MOVING_AVERAGE_DEFAULT;
+	for(uint8_t i = 0; i < MOVING_AVERAGE_MAX; i++) {
+		BC->moving_average[i] = 0;
+	}
 
 	simple_constructor();
 }
@@ -96,12 +119,8 @@ void destructor(void) {
 	adc_channel_disable(BS->adc_channel);
 }
 
-int32_t analog_value_from_mc(const int32_t value) {
-	return BA->adc_channel_get_data(BS->adc_channel);
-}
-
 int32_t distance_from_analog_value(const int32_t value) {
-	int32_t ret_value = BC->last_distance;
+	int32_t analog_data = BC->last_distance_value;
 
 	switch(BC->state) {
 		case STATE_ANALOG_LOW: {
@@ -129,7 +148,7 @@ int32_t distance_from_analog_value(const int32_t value) {
 
 		case STATE_ANALOG_MEASURE: {
 			if(BC->state_counter == 0) {
-				ret_value = BA->adc_channel_get_data(BS->adc_channel);
+				analog_data = BA->adc_channel_get_data(BS->adc_channel);
 			    adc_channel_disable(BS->adc_channel);
 
 			    PIN_DEPLEATE_CAP.type = PIO_OUTPUT_1;
@@ -149,8 +168,41 @@ int32_t distance_from_analog_value(const int32_t value) {
 		}
 	}
 
-	BC->last_distance = ret_value;
-	return ret_value;
+	BC->last_distance_value = analog_data;
+	
+	BA->printf("LDV  %d\n\r", analog_data);
+	
+	if (BC->moving_average_num > 0) {
+		BC->moving_average_sum = BC->moving_average_sum -
+		                         BC->moving_average[BC->moving_average_tick] +
+		                         analog_data;
+
+		BC->moving_average[BC->moving_average_tick] = analog_data;
+		BC->moving_average_tick = (BC->moving_average_tick + 1) % BC->moving_average_num;
+
+		BA->printf("LMAV %d\n\r", (BC->moving_average_sum + BC->moving_average_num/2)/BC->moving_average_num);
+		return (BC->moving_average_sum + BC->moving_average_num/2)/BC->moving_average_num;
+	} else {
+		return analog_data;
+	}
+}
+
+void set_moving_average(const ComType com, const SetMovingAverage *data) {
+	BC->moving_average_num = data->average;
+	if(BC->moving_average_num > MOVING_AVERAGE_MAX) {
+		BC->moving_average_num = MOVING_AVERAGE_MAX;
+	}
+
+	BA->com_return_setter(com, data);
+}
+
+void get_moving_average(const ComType com, const GetMovingAverage *data) {
+	GetMovingAverageReturn gmar;
+	gmar.header        = data->header;
+	gmar.header.length = sizeof(GetMovingAverageReturn);
+	gmar.average       = BC->moving_average_num;
+
+	BA->send_blocking_with_timeout(&gmar, sizeof(GetMovingAverageReturn), com);
 }
 
 void tick(const uint8_t tick_type) {

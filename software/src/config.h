@@ -39,7 +39,7 @@
 
 #define BRICKLET_DEVICE_IDENTIFIER 229
 
-#define MAX_ADC_VALUE ((1  << 12) - 1)
+#define MAX_ADC_VALUE ((1 << 12) - 1)
 #define MAX_VOLTAGE 3300
 
 #define PIN_ANALOG (BS->pin1_ad)
@@ -49,18 +49,16 @@
 #define BOARD_MCK 64000000
 
 #define LOGGING_LEVEL LOGGING_DEBUG
-#define DEBUG_BRICKLET 0
+#define DEBUG_BRICKLET 1
 
 #define BRICKLET_HAS_SIMPLE_SENSOR
 #define BRICKLET_NO_OFFSET
 #define INVOCATION_IN_BRICKLET_CODE
-#define NUM_SIMPLE_VALUES 2
+#define NUM_SIMPLE_VALUES 1
 
 typedef struct {
 	int32_t value[NUM_SIMPLE_VALUES];
 	int32_t last_value[NUM_SIMPLE_VALUES];
-	int16_t value_avg;
-	int32_t value_avg_sum;
 
 	uint32_t signal_period[NUM_SIMPLE_VALUES];
 	uint32_t signal_period_counter[NUM_SIMPLE_VALUES];
@@ -75,11 +73,16 @@ typedef struct {
 	int32_t  threshold_max_save[NUM_SIMPLE_VALUES];
 	char     threshold_option_save[NUM_SIMPLE_VALUES];
 
+	uint32_t tick;
+
 	uint8_t state;
 	uint8_t state_counter;
-	uint16_t last_distance;
+	uint16_t last_distance_value;
 
-	uint32_t tick;
+	uint32_t moving_average_sum;
+	uint16_t moving_average[MOVING_AVERAGE_MAX];
+	uint8_t moving_average_num;
+	uint8_t moving_average_tick;
 } BrickContext;
 
 #endif
