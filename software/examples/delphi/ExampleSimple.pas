@@ -36,9 +36,9 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { Get current distance (unit is mm) }
-  distance := dr.GetDistance;
-  WriteLn(Format('Distance: %f cm', [distance/10.0]));
+  { Get current distance value }
+  distance := dr.GetDistanceValue;
+  WriteLn(Format('Distance Value: %d', [distance]));
 
   WriteLn('Press key to exit');
   ReadLn;

@@ -15,10 +15,10 @@ if __name__ == "__main__":
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
 
-    # Get current distance (unit is mm)
-    distance = dist.get_distance()
+    # Get current distance value
+    distance = dist.get_distance_value()
 
-    print('Distance: ' + str(distance/10.0) + ' cm')
+    print('Distance Value: ' + str(distance))
 
     raw_input('Press key to exit\n') # Use input() in Python 3
     ipcon.disconnect()

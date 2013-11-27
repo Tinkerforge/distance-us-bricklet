@@ -8,11 +8,11 @@
 #define PORT 4223
 #define UID "XYZ" // Change to your UID
 
-// Callback function for distance callback (parameter has unit mm)
+// Callback function for distance value
 void cb_distance(uint16_t distance, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("Distance: %f cm\n", distance/10.0);
+	printf("Distance Value: %d\n", distance);
 }
 
 int main() {

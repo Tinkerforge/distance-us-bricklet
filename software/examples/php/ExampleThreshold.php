@@ -10,10 +10,10 @@ $host = 'localhost';
 $port = 4223;
 $uid = 'XYZ'; // Change to your UID
 
-// Callback for distance smaller than 20cm
+// Callback for distance value smaller than 200
 function cb_reached($distance)
 {
-    echo "Distance is smaller than 20cm: " . $distance / 10.0 . " cm\n";
+    echo "Distance Value is smaller than 200: $distance\n";
 }
 
 $ipcon = new IPConnection(); // Create IP connection
@@ -28,7 +28,7 @@ $dist->setDebouncePeriod(10000);
 // Register threshold reached callback to function cb_reached
 $dist->registerCallback(BrickletDistanceUS::CALLBACK_DISTANCE_REACHED, 'cb_reached');
 
-// Configure threshold for "smaller than 20cm" (unit is mm)
+// Configure threshold for "smaller than 200"
 $dist->setDistanceCallbackThreshold('<', 200, 0);
 
 echo "Press ctrl+c to exit\n";

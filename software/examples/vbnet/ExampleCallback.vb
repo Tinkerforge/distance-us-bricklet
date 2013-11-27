@@ -5,9 +5,9 @@ Module ExampleCallback
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change to your UID
 
-    ' Callback function for distance callback (parameter has unit mm)
+    ' Callback function for distance value
     Sub DistanceCB(ByVal sender As BrickletDistanceUS, ByVal distance As Integer)
-        System.Console.WriteLine("Distance: " + (distance/10.0).ToString() + " cm")
+        System.Console.WriteLine("Distance Value: " + distance.ToString() )
     End Sub
 
     Sub Main()

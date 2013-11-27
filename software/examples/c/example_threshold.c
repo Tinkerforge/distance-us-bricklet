@@ -8,11 +8,11 @@
 #define PORT 4223
 #define UID "XYZ" // Change to your UID
 
-// Callback for distance smaller than 20cm
+// Callback for distance value smaller than 200
 void cb_reached(uint16_t distance, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("Distance is smaller than 20cm: %f cm\n", distance/10.0);
+	printf("Distance Value is smaller than 200: %d\n", distance);
 }
 
 int main() {
@@ -40,7 +40,7 @@ int main() {
 	                              (void *)cb_reached,
 	                              NULL);
 
-	// Configure threshold for "smaller than 20cm" (unit is mm)
+	// Configure threshold for "smaller than 200"
 	distance_us_set_distance_callback_threshold(&dist, '<', 200, 0);
 
 	printf("Press key to exit\n");

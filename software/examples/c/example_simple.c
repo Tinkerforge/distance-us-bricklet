@@ -24,14 +24,14 @@ int main() {
 	}
 	// Don't use device before ipcon is connected
 
-	// Get current distance (unit is mm)
+	// Get current distance value
 	uint16_t distance;
-	if(distance_us_get_distance(&dist, &distance) < 0) {
+	if(distance_us_get_distance_value(&dist, &distance) < 0) {
 		fprintf(stderr, "Could not get value, probably timeout\n");
 		exit(1);
 	}
 
-	printf("Distance: %f cm\n", distance/10.0);
+	printf("Distance Value: %d\n", distance);
 
 	printf("Press key to exit\n");
 	getchar();

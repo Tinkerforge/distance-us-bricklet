@@ -5,7 +5,7 @@ public class ExampleThreshold {
 	private static final String host = "localhost";
 	private static final int port = 4223;
 	private static final String UID = "XYZ"; // Change to your UID
-	
+
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
@@ -18,14 +18,14 @@ public class ExampleThreshold {
 		// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 		dir.setDebouncePeriod(10000);
 
-		// Configure threshold for "smaller than 20 cm" (unit is mm)
+		// Configure threshold for "smaller than 200"
 		dir.setDistanceCallbackThreshold('<', (short)200, (short)0);
 
 		// Add and implement distance reached listener 
-		// (called if distance is smaller than 20 cm)
+		// (called if distance value is smaller than 200)
 		dir.addDistanceReachedListener(new BrickletDistanceUS.DistanceReachedListener() {
 			public void distanceReached(int distance) {
-				System.out.println("Distance is smaller than 20cm: " + distance/10.0 + " cm");
+				System.out.println("Distance Value is smaller than 200: " + distance);
 			}
 		});
 

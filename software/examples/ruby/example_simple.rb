@@ -16,9 +16,9 @@ dir = BrickletDistanceUS.new UID, ipcon # Create device object
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Get current distance (unit is mm)
-distance = dir.get_distance / 10.0
-puts "Distance: #{distance} cm"
+# Get current distance
+distance = dir.get_distance_value
+puts "Distance Value: #{distance}"
 
 puts 'Press key to exit'
 $stdin.gets

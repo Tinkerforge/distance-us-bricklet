@@ -23,7 +23,7 @@ public class ExampleCallback {
 		// Add and implement distance listener (called if distance changes)
 		dir.addDistanceListener(new BrickletDistanceUS.DistanceListener() {
 			public void distance(int distance) {
-				System.out.println("Distance: " + distance/10.0 + " cm");
+				System.out.println("Distance Value: " + distance);
 			}
 		});
 

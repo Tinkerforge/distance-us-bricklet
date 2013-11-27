@@ -12,10 +12,10 @@ Module ExampleSimple
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Get current distance (unit is mm)
-        Dim distance As Integer = al.GetDistance()
+        ' Get current distance
+        Dim distance As Integer = al.GetDistanceValue()
 
-        System.Console.WriteLine("Distance: " + (distance/10.0).ToString() + " cm")
+        System.Console.WriteLine("Distance Value: " + (distance).ToString())
 
         System.Console.WriteLine("Press key to exit")
         System.Console.ReadKey()

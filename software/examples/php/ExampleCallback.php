@@ -10,10 +10,10 @@ $host = 'localhost';
 $port = 4223;
 $uid = 'XYZ'; // Change to your UID
 
-// Callback function for distance callback (parameter has unit mm)
+// Callback function for distance value
 function cb_distance($distance)
 {
-    echo "Distance: " . $distance / 10.0 . " cm\n";
+    echo "Distance Value: $distance\n";
 }
 
 $ipcon = new IPConnection(); // Create IP connection

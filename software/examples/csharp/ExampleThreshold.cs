@@ -6,10 +6,10 @@ class Example
 	private static int PORT = 4223;
 	private static string UID = "XYZ"; // Change to your UID
 
-	// Callback for distance smaller than 20 cm
+	// Callback for distance smaller than 200
 	static void ReachedCB(BrickletDistanceUS sender, int distance)
 	{
-		System.Console.WriteLine("Distance is smaller than 20 cm: " + distance/10.0 + " cm");
+		System.Console.WriteLine("Distance Value is smaller than 200: " + distance);
 	}
 
 	static void Main() 
@@ -26,7 +26,7 @@ class Example
 		// Register threshold reached callback to function ReachedCB
 		dir.DistanceReached += ReachedCB;
 
-		// Configure threshold for "smaller than 20 cm" (unit is mm)
+		// Configure threshold for "smaller than 200"
 		dir.SetDistanceCallbackThreshold('<', 200, 0);
 
 		System.Console.WriteLine("Press key to exit");

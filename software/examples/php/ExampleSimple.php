@@ -16,10 +16,10 @@ $dist = new BrickletDistanceUS($uid, $ipcon); // Create device object
 $ipcon->connect($host, $port); // Connect to brickd
 // Don't use device before ipcon is connected
 
-// Get current distance (unit is mm)
-$distance = $dist->getDistance() / 10.0;
+// Get current distance value
+$distance = $dist->getDistanceValue();
 
-echo "Distance: $distance cm\n";
+echo "Distance Value: $distance\n";
 
 echo "Press key to exit\n";
 fgetc(fopen('php://stdin', 'r'));

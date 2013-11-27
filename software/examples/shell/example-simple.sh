@@ -4,5 +4,5 @@
 # change to your UID
 uid=XYZ
 
-# get current distance (unit is mm)
-tinkerforge call distance-us-bricklet $uid get-distance
+# get current distance value
+tinkerforge call distance-us-bricklet $uid get-distance-value

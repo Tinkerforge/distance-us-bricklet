@@ -14,10 +14,10 @@ class Example
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Get current distance (unit is mm)
-		int distance = dir.GetDistance();
+		// Get current distance value
+		int distance = dir.GetDistanceValue();
 
-		System.Console.WriteLine("Distance: " + distance/10.0 + " cm");
+		System.Console.WriteLine("Distance Value: " + distance);
 
 		System.Console.WriteLine("Press key to exit");
 		System.Console.ReadKey();

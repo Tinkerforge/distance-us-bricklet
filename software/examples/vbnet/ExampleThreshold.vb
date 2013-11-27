@@ -5,9 +5,9 @@ Module ExampleThreshold
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change to your UID
 
-    ' Callback for distance smaller than 20 cm
+    ' Callback for distance value smaller than 200
     Sub ReachedCB(ByVal sender As BrickletDistanceUS, ByVal distance As Integer)
-        System.Console.WriteLine("Distance is smaller than 20 cm: " + (distance/10.0).ToString() + " cm")
+        System.Console.WriteLine("Distance is smaller than 200: " + distance.ToString())
     End Sub
 
     Sub Main()
@@ -23,7 +23,7 @@ Module ExampleThreshold
         ' Register threshold reached callback to function ReachedCB
         AddHandler di.DistanceReached, AddressOf ReachedCB
 
-        ' Configure threshold for "smaller than 20 cm" (unit is mm)
+        ' Configure threshold for "smaller than 200"
         di.SetDistanceCallbackThreshold("<"C, 200, 0)
 
         System.Console.WriteLine("Press key to exit")

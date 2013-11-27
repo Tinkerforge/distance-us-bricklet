@@ -8,9 +8,9 @@ UID = "XYZ" # Change to your UID
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_distance_us import DistanceUS
 
-# Callback function for distance callback (parameter has unit mm)
+# Callback function for distance value
 def cb_distance(distance):
-    print('Distance: ' + str(distance/10.0) + ' cm')
+    print('Distance Value: ' + str(distance))
 
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection

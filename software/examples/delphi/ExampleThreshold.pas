@@ -24,10 +24,10 @@ const
 var
   e: TExample;
 
-{ Callback for distance smaller than 20 cm }
+{ Callback for distance value smaller than 200 }
 procedure TExample.ReachedCB(sender: TBrickletDistanceUS; const distance: word);
 begin
-  WriteLn(Format('Distance is smaller than 20 cm: %f cm', [distance/10.0]));
+  WriteLn(Format('Distance Value is smaller than 200: %d', [distance]));
 end;
 
 procedure TExample.Execute;
@@ -48,8 +48,8 @@ begin
   { Register threshold reached callback to procedure ReachedCB }
   dr.OnDistanceReached := {$ifdef FPC}@{$endif}ReachedCB;
 
-  { Configure threshold for "smaller than 20cm" (unit is mm) }
-  dr.SetDistanceCallbackThreshold('<', 20*10, 0);
+  { Configure threshold for "smaller than 200" }
+  dr.SetDistanceCallbackThreshold('<', 200, 0);
 
   WriteLn('Press key to exit');
   ReadLn;

@@ -6,10 +6,10 @@ class Example
 	private static int PORT = 4223;
 	private static string UID = "XYZ"; // Change to your UID
 
-	// Callback function for distance callback (parameter has unit mm)
+	// Callback function for distance value
 	static void DistanceCB(BrickletDistanceUS sender, int distance)
 	{
-		System.Console.WriteLine("Distance: " + distance/10.0 + " cm");
+		System.Console.WriteLine("Distance Value: " + distance);
 	}
 
 	static void Main() 

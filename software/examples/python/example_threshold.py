@@ -8,9 +8,9 @@ UID = "XYZ" # Change to your UID
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_distance_us import DistanceUS
 
-# Callback for distance smaller than 20cm
+# Callback for distance value smaller than 200
 def cb_reached(distance):
-    print('Distance is smaller than 20cm: ' + str(distance/10.0) + ' cm')
+    print('Distance Value is smaller than 200: ' + str(distance))
 
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # Register threshold reached callback to function cb_reached
     dist.register_callback(dist.CALLBACK_DISTANCE_REACHED, cb_reached)
 
-    # Configure threshold for "smaller than 20cm" (unit is mm)
+    # Configure threshold for "smaller than 200"
     dist.set_distance_callback_threshold('<', 200, 0)
 
     raw_input('Press key to exit\n') # Use input() in Python 3
