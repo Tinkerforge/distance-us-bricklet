@@ -31,7 +31,7 @@
 
 #define BRICKLET_FIRMWARE_VERSION_MAJOR 2
 #define BRICKLET_FIRMWARE_VERSION_MINOR 0
-#define BRICKLET_FIRMWARE_VERSION_REVISION 1
+#define BRICKLET_FIRMWARE_VERSION_REVISION 2
 
 #define BRICKLET_HARDWARE_VERSION_MAJOR 1
 #define BRICKLET_HARDWARE_VERSION_MINOR 0
@@ -65,24 +65,25 @@ typedef struct {
 
 	uint32_t threshold_debounce;
 	uint32_t threshold_period_current[NUM_SIMPLE_VALUES];
-	int32_t  threshold_min[NUM_SIMPLE_VALUES];
-	int32_t  threshold_max[NUM_SIMPLE_VALUES];
-	char     threshold_option[NUM_SIMPLE_VALUES];
+	int32_t threshold_min[NUM_SIMPLE_VALUES];
+	int32_t threshold_max[NUM_SIMPLE_VALUES];
 
-	int32_t  threshold_min_save[NUM_SIMPLE_VALUES];
-	int32_t  threshold_max_save[NUM_SIMPLE_VALUES];
-	char     threshold_option_save[NUM_SIMPLE_VALUES];
+	int32_t threshold_min_save[NUM_SIMPLE_VALUES];
+	int32_t threshold_max_save[NUM_SIMPLE_VALUES];
 
 	uint32_t tick;
-
-	uint8_t state;
-	uint8_t state_counter;
-	uint16_t last_distance_value;
-
 	uint32_t moving_average_sum;
+
 	uint16_t moving_average[MOVING_AVERAGE_MAX];
+
+	uint16_t last_distance_value;
 	uint8_t moving_average_num;
 	uint8_t moving_average_tick;
+
+	char threshold_option_save[NUM_SIMPLE_VALUES];
+	char threshold_option[NUM_SIMPLE_VALUES];
+	uint8_t state;
+	uint8_t state_counter;
 } BrickContext;
 
 #endif

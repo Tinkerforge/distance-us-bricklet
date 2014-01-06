@@ -77,6 +77,8 @@ void invocation(const ComType com, const uint8_t *data) {
 }
 
 void constructor(void) {
+	_Static_assert(sizeof(BrickContext) <= BRICKLET_CONTEXT_MAX_SIZE, "BrickContext too big");
+
 	BC->state = STATE_ANALOG_LOW;
 	BC->state_counter = 0;
 	BC->last_distance_value = 0;
