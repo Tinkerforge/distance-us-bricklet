@@ -6,9 +6,9 @@ require_once('Tinkerforge/BrickletDistanceUS.php');
 use Tinkerforge\IPConnection;
 use Tinkerforge\BrickletDistanceUS;
 
-$host = 'localhost';
-$port = 4223;
-$uid = 'XYZ'; // Change to your UID
+const HOST = 'localhost';
+const PORT = 4223;
+const UID = 'XYZ'; // Change to your UID
 
 // Callback for distance value smaller than 200
 function cb_reached($distance)
@@ -17,9 +17,9 @@ function cb_reached($distance)
 }
 
 $ipcon = new IPConnection(); // Create IP connection
-$dist = new BrickletDistanceUS($uid, $ipcon); // Create device object
+$dist = new BrickletDistanceUS(UID, $ipcon); // Create device object
 
-$ipcon->connect($host, $port); // Connect to brickd
+$ipcon->connect(HOST, PORT); // Connect to brickd
 // Don't use device before ipcon is connected
 
 // Get threshold callbacks with a debounce time of 10 second (10000ms)
