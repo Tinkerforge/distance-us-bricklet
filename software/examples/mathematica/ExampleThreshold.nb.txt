@@ -1,0 +1,30 @@
+Needs["NETLink`"]
+LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
+
+host="localhost"
+port=4223
+uid="555"(* Change to your UID *)
+
+(* Create IPConnection and device object *)
+ipcon=NETNew["Tinkerforge.IPConnection"]
+dus=NETNew["Tinkerforge.BrickletDistanceUS",uid,ipcon]
+ipcon@Connect[host,port]
+
+(* Get threshold callbacks with a debounce time of 10 seconds (10000ms) *)
+dus@SetDebouncePeriod[10000]
+
+(* Callback for distance smaller than 200 *)
+DistanceReachedCB[sender_,distance_]:=
+ Print["Distance Value is smaller than 200: "<>ToString[distance]]
+AddEventHandler[dus@DistanceReached,DistanceReachedCB]
+
+(* CConfigure threshold for "smaller than 200" *)
+option=Tinkerforge`BrickletDistanceUS`THRESHOLDUOPTIONUSMALLER
+dus@SetDistanceCallbackThreshold[option,200,0]
+
+Input["Click OK to exit"]
+
+(* Clean up *)
+ipcon@Disconnect[]
+ReleaseNETObject[dus]
+ReleaseNETObject[ipcon]
