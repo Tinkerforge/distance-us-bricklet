@@ -2,18 +2,18 @@ var Tinkerforge = require('tinkerforge');
 
 var HOST = 'localhost';
 var PORT = 4223;
-var UID = 'jAw';// Change to your UID
+var UID = 'jAw'; // Change to your UID
 
-var ipcon = new Tinkerforge.IPConnection();// Create IP connection
-var dist = new Tinkerforge.BrickletDistanceUS(UID, ipcon);// Create device object
+var ipcon = new Tinkerforge.IPConnection(); // Create IP connection
+var dist = new Tinkerforge.BrickletDistanceUS(UID, ipcon); // Create device object
 
 ipcon.connect(HOST, PORT,
     function(error) {
-        console.log('Error: '+error);        
+        console.log('Error: '+error);
     }
-);// Connect to brickd
-
+); // Connect to brickd
 // Don't use device before ipcon is connected
+
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function(connectReason) {
         // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
@@ -21,9 +21,9 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
         // Configure threshold for "smaller than 200"
         dist.setDistanceCallbackThreshold('<', 200, 0);
         // Set Period for distance callback to 0.2s (200ms)
-        // Note: The callback is only called every 200ms if the 
+        // Note: The callback is only called every 200ms if the
         // distance has changed since the last call!
-        dist.setDistanceCallbackPeriod(200);       
+        dist.setDistanceCallbackPeriod(200);
     }
 );
 
@@ -42,4 +42,3 @@ process.stdin.on('data',
         process.exit(0);
     }
 );
-
