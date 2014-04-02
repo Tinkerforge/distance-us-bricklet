@@ -15,9 +15,8 @@ $ipcon->connect(&HOST, &PORT); # Connect to brickd
 
 # Get current distance value
 my $distance = $dist->get_distance_value();
+print "Distance Value: $distance\n";
 
-print "\nDistance Value: ".$distance."\n";
-
-print "\nPress any key to exit...\n";
+print "Press any key to exit...\n";
 <STDIN>;
 $ipcon->disconnect();

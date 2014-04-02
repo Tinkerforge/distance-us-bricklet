@@ -13,8 +13,9 @@ my $dist = Tinkerforge::BrickletDistanceUS->new(&UID, $ipcon); # Create device o
 # Callback function for distance value
 sub cb_distance
 {
-    my($distance) = @_;
-    print "\nDistance Value: ".$distance."\n";
+    my ($distance) = @_;
+
+    print "Distance Value: $distance\n";
 }
 
 $ipcon->connect(&HOST, &PORT); # Connect to brickd
@@ -28,6 +29,6 @@ $dist->set_distance_callback_period(200);
 # Register distance callback to function cb_distance
 $dist->register_callback($dist->CALLBACK_DISTANCE, 'cb_distance');
 
-print "\nPress any key to exit...\n";
+print "Press any key to exit...\n";
 <STDIN>;
 $ipcon->disconnect();

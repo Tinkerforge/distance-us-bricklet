@@ -14,7 +14,8 @@ my $dist = Tinkerforge::BrickletDistanceUS->new(&UID, $ipcon); # Create device o
 sub cb_reached
 {
     my ($distance) = @_;
-    print "\nDistance Value is smaller than 200: ".$distance."\n";
+
+    print "Distance Value is smaller than 200: $distance\n";
 }
 
 $ipcon->connect(&HOST, &PORT); # Connect to brickd
@@ -29,6 +30,6 @@ $dist->register_callback($dist->CALLBACK_DISTANCE_REACHED, 'cb_reached');
 # Configure threshold for "smaller than 200"
 $dist->set_distance_callback_threshold('<', 200, 0);
 
-print "\nPress any key to exit...\n";
+print "Press any key to exit...\n";
 <STDIN>;
 $ipcon->disconnect();
