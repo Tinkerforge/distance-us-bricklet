@@ -18,13 +18,13 @@ function matlab_example_callback
     dist.setDistanceCallbackPeriod(200);
 
     % Register distance callback to function cb_distance
-    set(dist, 'DistanceCallback', @(h, e)cb_distance(e.distance));
+    set(dist, 'DistanceCallback', @(h, e) cb_distance(e));
 
-    input('\nPress any key to exit...\n', 's');
+    input('Press any key to exit...\n', 's');
     ipcon.disconnect();
 end
 
 % Callback function for distance value
-function cb_distance(distance)
-    fprintf('Distance Value: %g\n', distance);
+function cb_distance(e)
+    fprintf('Distance Value: %g\n', e.distance);
 end

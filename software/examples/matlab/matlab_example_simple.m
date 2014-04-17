@@ -14,9 +14,8 @@ function matlab_example_simple
 
     % Get current distance value
     distance = dist.getDistanceValue();
-
     fprintf('Distance Value: %g\n', distance);
 
-    input('\nPress any key to exit...\n', 's');
+    input('Press any key to exit...\n', 's');
     ipcon.disconnect();
 end
