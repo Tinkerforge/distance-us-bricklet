@@ -37,7 +37,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "Distance US Bricklet"
-Date "15 oct 2013"
+Date "18 oct 2013"
 Rev "1.0"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
@@ -512,7 +512,7 @@ L C C6
 U 1 1 521F53BF
 P 8750 4500
 F 0 "C6" H 8800 4600 50  0000 L CNN
-F 1 "0,1µF NC0" H 8800 4400 50  0000 L CNN
+F 1 "0,1µF NP0" H 8800 4400 50  0000 L CNN
 F 2 "1206" H 8750 4500 60  0001 C CNN
 F 3 "" H 8750 4500 60  0000 C CNN
 	1    8750 4500
