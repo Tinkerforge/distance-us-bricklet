@@ -51,8 +51,7 @@
                 dist.on(Tinkerforge.BrickletDistanceUS.CALLBACK_DISTANCE,
                     // Callback function for distance value
                     function(distance) {
-                        textArea.value += 'Distance: '+distance;
-                        textArea.value += '\n';
+                        textArea.value += 'Distance: '+distance+'\n';
                         textArea.scrollTop = textArea.scrollHeight;
                     }
                 );

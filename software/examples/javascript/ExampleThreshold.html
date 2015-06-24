@@ -55,8 +55,7 @@
                 dist.on(Tinkerforge.BrickletDistanceUS.CALLBACK_DISTANCE_REACHED,
                     // Callback for distance value smaller than 200
                     function(distance) {
-                        textArea.value += 'Distance value is smaller than 200: '+distance;
-                        textArea.value += '\n';
+                        textArea.value += 'Distance value is smaller than 200: '+distance+'\n';
                         textArea.scrollTop = textArea.scrollHeight;
                     }
                 );
