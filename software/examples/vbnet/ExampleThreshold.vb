@@ -12,19 +12,19 @@ Module ExampleThreshold
 
     Sub Main()
         Dim ipcon As New IPConnection() ' Create IP connection
-        Dim di As New BrickletDistanceUS(UID, ipcon) ' Create device object
+        Dim dus As New BrickletDistanceUS(UID, ipcon) ' Create device object
 
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
         ' Get threshold callbacks with a debounce time of 10 seconds (10000ms)
-        di.SetDebouncePeriod(10000)
+        dus.SetDebouncePeriod(10000)
 
         ' Register threshold reached callback to function ReachedCB
-        AddHandler di.DistanceReached, AddressOf ReachedCB
+        AddHandler dus.DistanceReached, AddressOf ReachedCB
 
         ' Configure threshold for "smaller than 200"
-        di.SetDistanceCallbackThreshold("<"C, 200, 0)
+        dus.SetDistanceCallbackThreshold("<"C, 200, 0)
 
         System.Console.WriteLine("Press key to exit")
         System.Console.ReadLine()

@@ -7,15 +7,15 @@ Module ExampleSimple
 
     Sub Main()
         Dim ipcon As New IPConnection() ' Create IP connection
-        Dim al As New BrickletDistanceUS(UID, ipcon) ' Create device object
+        Dim dus As New BrickletDistanceUS(UID, ipcon) ' Create device object
 
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
         ' Get current distance
-        Dim distance As Integer = al.GetDistanceValue()
+        Dim distance As Integer = dus.GetDistanceValue()
 
-        System.Console.WriteLine("Distance Value: " + (distance).ToString())
+        System.Console.WriteLine("Distance Value: " + distance.ToString())
 
         System.Console.WriteLine("Press key to exit")
         System.Console.ReadLine()
