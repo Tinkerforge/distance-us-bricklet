@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-  
+# -*- coding: utf-8 -*-
 
 HOST = "localhost"
 PORT = 4223
@@ -10,15 +10,14 @@ from tinkerforge.bricklet_distance_us import DistanceUS
 
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection
-    dist = DistanceUS(UID, ipcon) # Create device object
+    dus = DistanceUS(UID, ipcon) # Create device object
 
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
 
     # Get current distance value
-    distance = dist.get_distance_value()
-
-    print('Distance Value: ' + str(distance))
+    distance_value = dus.get_distance_value()
+    print('Distance Value: ' + str(distance_value))
 
     raw_input('Press key to exit\n') # Use input() in Python 3
     ipcon.disconnect()

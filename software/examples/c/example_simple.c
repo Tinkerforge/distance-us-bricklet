@@ -13,8 +13,8 @@ int main() {
 	ipcon_create(&ipcon);
 
 	// Create device object
-	DistanceUS dist;
-	distance_us_create(&dist, UID, &ipcon); 
+	DistanceUS dus;
+	distance_us_create(&dus, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -24,13 +24,13 @@ int main() {
 	// Don't use device before ipcon is connected
 
 	// Get current distance value
-	uint16_t distance;
-	if(distance_us_get_distance_value(&dist, &distance) < 0) {
-		fprintf(stderr, "Could not get value, probably timeout\n");
+	uint16_t distance_value;
+	if(distance_us_get_distance_value(&dus, &distance_value) < 0) {
+		fprintf(stderr, "Could not get distance value, probably timeout\n");
 		exit(1);
 	}
 
-	printf("Distance Value: %d\n", distance);
+	printf("Distance Value: %d\n", distance_value);
 
 	printf("Press key to exit\n");
 	getchar();

@@ -11,14 +11,14 @@ PORT = 4223
 UID = 'XYZ' # Change to your UID
 
 ipcon = IPConnection.new # Create IP connection
-dir = BrickletDistanceUS.new UID, ipcon # Create device object
+dus = BrickletDistanceUS.new UID, ipcon # Create device object
 
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Get current distance
-distance = dir.get_distance_value
-puts "Distance Value: #{distance}"
+# Get current distance value
+distance_value = dus.get_distance_value
+puts "Distance Value: #{distance_value}"
 
 puts 'Press key to exit'
 $stdin.gets

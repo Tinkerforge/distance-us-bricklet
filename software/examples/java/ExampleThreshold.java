@@ -1,5 +1,5 @@
-import com.tinkerforge.BrickletDistanceUS;
 import com.tinkerforge.IPConnection;
+import com.tinkerforge.BrickletDistanceUS;
 
 public class ExampleThreshold {
 	private static final String HOST = "localhost";
@@ -10,22 +10,21 @@ public class ExampleThreshold {
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletDistanceUS dir = new BrickletDistanceUS(UID, ipcon); // Create device object
+		BrickletDistanceUS dus = new BrickletDistanceUS(UID, ipcon); // Create device object
 
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
-		dir.setDebouncePeriod(10000);
+		dus.setDebouncePeriod(10000);
 
 		// Configure threshold for "smaller than 200"
-		dir.setDistanceCallbackThreshold('<', (short)200, (short)0);
+		dus.setDistanceCallbackThreshold('<', (short)200, (short)0);
 
-		// Add and implement distance reached listener 
-		// (called if distance value is smaller than 200)
-		dir.addDistanceReachedListener(new BrickletDistanceUS.DistanceReachedListener() {
+		// Add threshold reached listener for distance value smaller than 200
+		dus.addDistanceReachedListener(new BrickletDistanceUS.DistanceReachedListener() {
 			public void distanceReached(int distance) {
-				System.out.println("Distance Value is smaller than 200: " + distance);
+				System.out.println("Distance Value: " + distance);
 			}
 		});
 

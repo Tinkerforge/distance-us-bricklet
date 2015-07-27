@@ -7,11 +7,11 @@
 #define PORT 4223
 #define UID "XYZ" // Change to your UID
 
-// Callback for distance value smaller than 200
-void cb_reached(uint16_t distance, void *user_data) {
+// Callback function for distance value smaller than 200
+void cb_distance_reached(uint16_t distance, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("Distance Value is smaller than 200: %d\n", distance);
+	printf("Distance Value: %d\n", distance);
 }
 
 int main() {
@@ -20,8 +20,8 @@ int main() {
 	ipcon_create(&ipcon);
 
 	// Create device object
-	DistanceUS dist;
-	distance_us_create(&dist, UID, &ipcon); 
+	DistanceUS dus;
+	distance_us_create(&dus, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -30,17 +30,17 @@ int main() {
 	}
 	// Don't use device before ipcon is connected
 
-	// Get threshold callbacks with a debounce time of 1 second (1000ms)
-	distance_us_set_debounce_period(&dist, 1000);
+	// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
+	distance_us_set_debounce_period(&dus, 10000);
 
-	// Register threshold reached callback to function cb_reached
-	distance_us_register_callback(&dist,
+	// Register threshold reached callback to function cb_distance_reached
+	distance_us_register_callback(&dus,
 	                              DISTANCE_US_CALLBACK_DISTANCE_REACHED,
-	                              (void *)cb_reached,
+	                              (void *)cb_distance_reached,
 	                              NULL);
 
 	// Configure threshold for "smaller than 200"
-	distance_us_set_distance_callback_threshold(&dist, '<', 200, 0);
+	distance_us_set_distance_callback_threshold(&dus, '<', 200, 0);
 
 	printf("Press key to exit\n");
 	getchar();

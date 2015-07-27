@@ -7,7 +7,7 @@
 #define PORT 4223
 #define UID "XYZ" // Change to your UID
 
-// Callback function for distance value
+// Callback function for distance value callback
 void cb_distance(uint16_t distance, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
@@ -20,8 +20,8 @@ int main() {
 	ipcon_create(&ipcon);
 
 	// Create device object
-	DistanceUS dist;
-	distance_us_create(&dist, UID, &ipcon); 
+	DistanceUS dus;
+	distance_us_create(&dus, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -30,14 +30,14 @@ int main() {
 	}
 	// Don't use device before ipcon is connected
 
-	// Set Period for distance callback to 0.2s (200ms)
-	// Note: The callback is only called every 200ms if the 
-	//       distance has changed since the last call!
-	distance_us_set_distance_callback_period(&dist, 200);
+	// Set period for distance value callback to 0.2s (200ms)
+	// Note: The distance value callback is only called every 0.2 seconds
+	//       if the distance value has changed since the last call!
+	distance_us_set_distance_callback_period(&dus, 200);
 
-	// Register distance callback to function cb_distance
-	distance_us_register_callback(&dist,
-	                              DISTANCE_US_CALLBACK_DISTANCE, 
+	// Register distance value callback to function cb_distance
+	distance_us_register_callback(&dus,
+	                              DISTANCE_US_CALLBACK_DISTANCE,
 	                              (void *)cb_distance,
 	                              NULL);
 

@@ -11,21 +11,21 @@ PORT = 4223
 UID = 'XYZ' # Change to your UID
 
 ipcon = IPConnection.new # Create IP connection
-dir = BrickletDistanceUS.new UID, ipcon # Create device object
+dus = BrickletDistanceUS.new UID, ipcon # Create device object
 
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
 # Get threshold callbacks with a debounce time of 10 seconds (10000ms)
-dir.set_debounce_period 10000
+dus.set_debounce_period 10000
 
 # Register threshold reached callback for distance value smaller than 200
-dir.register_callback(BrickletDistanceUS::CALLBACK_DISTANCE_REACHED) do |distance|
-  puts "Distance Value is smaller than 200: #{distance}"
+dus.register_callback(BrickletDistanceUS::CALLBACK_DISTANCE_REACHED) do |distance|
+  puts "Distance Value: #{distance}"
 end
 
 # Configure threshold for "smaller than 200"
-dir.set_distance_callback_threshold '<', 200, 0
+dus.set_distance_callback_threshold '<', 200, 0
 
 puts 'Press key to exit'
 $stdin.gets
