@@ -10,7 +10,7 @@ type
   TExample = class
   private
     ipcon: TIPConnection;
-    dr: TBrickletDistanceUS;
+    dus: TBrickletDistanceUS;
   public
     procedure Execute;
   end;
@@ -24,21 +24,21 @@ var
   e: TExample;
 
 procedure TExample.Execute;
-var distance: word;
+var distanceValue: word;
 begin
   { Create IP connection }
   ipcon := TIPConnection.Create;
 
   { Create device object }
-  dr := TBrickletDistanceUS.Create(UID, ipcon);
+  dus := TBrickletDistanceUS.Create(UID, ipcon);
 
   { Connect to brickd }
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
   { Get current distance value }
-  distance := dr.GetDistanceValue;
-  WriteLn(Format('Distance Value: %d', [distance]));
+  distanceValue := dus.GetDistanceValue;
+  WriteLn(Format('Distance Value: %d', [distanceValue]));
 
   WriteLn('Press key to exit');
   ReadLn;
