@@ -19,7 +19,7 @@ public class ExampleThreshold {
 		dus.setDebouncePeriod(10000);
 
 		// Configure threshold for "smaller than 200"
-		dus.setDistanceCallbackThreshold('<', (short)200, (short)0);
+		dus.setDistanceCallbackThreshold('<', 200, 0);
 
 		// Add threshold reached listener for distance value smaller than 200
 		dus.addDistanceReachedListener(new BrickletDistanceUS.DistanceReachedListener() {
