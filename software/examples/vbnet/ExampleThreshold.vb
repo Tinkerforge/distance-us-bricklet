@@ -5,9 +5,9 @@ Module ExampleThreshold
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change to your UID
 
-    ' Callback for distance value smaller than 200
-    Sub ReachedCB(ByVal sender As BrickletDistanceUS, ByVal distance As Integer)
-        System.Console.WriteLine("Distance is smaller than 200: " + distance.ToString())
+    ' Callback function for distance value smaller than 200
+    Sub DistanceReachedCB(ByVal sender As BrickletDistanceUS, ByVal distance As Integer)
+        System.Console.WriteLine("Distance Value: " + distance.ToString())
     End Sub
 
     Sub Main()
@@ -20,8 +20,8 @@ Module ExampleThreshold
         ' Get threshold callbacks with a debounce time of 10 seconds (10000ms)
         dus.SetDebouncePeriod(10000)
 
-        ' Register threshold reached callback to function ReachedCB
-        AddHandler dus.DistanceReached, AddressOf ReachedCB
+        ' Register threshold reached callback to function DistanceReachedCB
+        AddHandler dus.DistanceReached, AddressOf DistanceReachedCB
 
         ' Configure threshold for "smaller than 200"
         dus.SetDistanceCallbackThreshold("<"C, 200, 0)

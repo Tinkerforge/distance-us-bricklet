@@ -5,7 +5,7 @@ Module ExampleCallback
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change to your UID
 
-    ' Callback function for distance value
+    ' Callback function for distance value callback
     Sub DistanceCB(ByVal sender As BrickletDistanceUS, ByVal distance As Integer)
         System.Console.WriteLine("Distance Value: " + distance.ToString())
     End Sub
@@ -17,12 +17,12 @@ Module ExampleCallback
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Set Period for distance callback to 1s (1000ms)
-        ' Note: The distance callback is only called every second if the 
-        '       distance has changed since the last call!
-        dus.SetDistanceCallbackPeriod(1000)
+        ' Set period for distance value callback to 0.2s (200ms)
+        ' Note: The distance value callback is only called every 0.2 seconds
+        '       if the distance value has changed since the last call!
+        dus.SetDistanceCallbackPeriod(200)
 
-        ' Register distance callback to function DistanceCB
+        ' Register distance value callback to function DistanceCB
         AddHandler dus.Distance, AddressOf DistanceCB
 
         System.Console.WriteLine("Press key to exit")
