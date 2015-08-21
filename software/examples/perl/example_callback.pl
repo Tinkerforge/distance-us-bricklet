@@ -15,7 +15,7 @@ sub cb_distance
 {
     my ($distance) = @_;
 
-    print "Distance Value: " . $distance . "\n";
+    print "Distance Value: $distance\n";
 }
 
 $ipcon->connect(&HOST, &PORT); # Connect to brickd
