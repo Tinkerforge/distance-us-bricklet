@@ -17,8 +17,8 @@ ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
 # Get current distance value
-distance_value = dus.get_distance_value
-puts "Distance Value: #{distance_value}"
+distance = dus.get_distance_value
+puts "Distance Value: #{distance}"
 
 puts 'Press key to exit'
 $stdin.gets

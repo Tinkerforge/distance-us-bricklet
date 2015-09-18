@@ -1,3 +1,4 @@
+using System;
 using Tinkerforge;
 
 class Example
@@ -9,7 +10,7 @@ class Example
 	// Callback function for distance value callback
 	static void DistanceCB(BrickletDistanceUS sender, int distance)
 	{
-		System.Console.WriteLine("Distance Value: " + distance);
+		Console.WriteLine("Distance Value: " + distance);
 	}
 
 	static void Main()
@@ -20,16 +21,16 @@ class Example
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
+		// Register distance value callback to function DistanceCB
+		dus.Distance += DistanceCB;
+
 		// Set period for distance value callback to 0.2s (200ms)
 		// Note: The distance value callback is only called every 0.2 seconds
 		//       if the distance value has changed since the last call!
 		dus.SetDistanceCallbackPeriod(200);
 
-		// Register distance value callback to function DistanceCB
-		dus.Distance += DistanceCB;
-
-		System.Console.WriteLine("Press enter to exit");
-		System.Console.ReadLine();
+		Console.WriteLine("Press enter to exit");
+		Console.ReadLine();
 		ipcon.Disconnect();
 	}
 }

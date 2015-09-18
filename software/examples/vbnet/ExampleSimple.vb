@@ -1,3 +1,4 @@
+Imports System
 Imports Tinkerforge
 
 Module ExampleSimple
@@ -13,11 +14,11 @@ Module ExampleSimple
         ' Don't use device before ipcon is connected
 
         ' Get current distance value
-        Dim distanceValue As Integer = dus.GetDistanceValue()
-        System.Console.WriteLine("Distance Value: " + distanceValue.ToString())
+        Dim distance As Integer = dus.GetDistanceValue()
+        Console.WriteLine("Distance Value: " + distance.ToString())
 
-        System.Console.WriteLine("Press key to exit")
-        System.Console.ReadLine()
+        Console.WriteLine("Press key to exit")
+        Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module

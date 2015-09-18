@@ -1,3 +1,4 @@
+Imports System
 Imports Tinkerforge
 
 Module ExampleCallback
@@ -5,9 +6,9 @@ Module ExampleCallback
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change to your UID
 
-    ' Callback function for distance value callback
+    ' Callback subroutine for distance value callback
     Sub DistanceCB(ByVal sender As BrickletDistanceUS, ByVal distance As Integer)
-        System.Console.WriteLine("Distance Value: " + distance.ToString())
+        Console.WriteLine("Distance Value: " + distance.ToString())
     End Sub
 
     Sub Main()
@@ -17,16 +18,16 @@ Module ExampleCallback
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
+        ' Register distance value callback to subroutine DistanceCB
+        AddHandler dus.Distance, AddressOf DistanceCB
+
         ' Set period for distance value callback to 0.2s (200ms)
         ' Note: The distance value callback is only called every 0.2 seconds
         '       if the distance value has changed since the last call!
         dus.SetDistanceCallbackPeriod(200)
 
-        ' Register distance value callback to function DistanceCB
-        AddHandler dus.Distance, AddressOf DistanceCB
-
-        System.Console.WriteLine("Press key to exit")
-        System.Console.ReadLine()
+        Console.WriteLine("Press key to exit")
+        Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module

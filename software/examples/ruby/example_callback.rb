@@ -16,15 +16,15 @@ dus = BrickletDistanceUS.new UID, ipcon # Create device object
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Set period for distance value callback to 0.2s (200ms)
-# Note: The distance value callback is only called every 0.2 seconds
-#       if the distance value has changed since the last call!
-dus.set_distance_callback_period 200
-
 # Register distance value callback
 dus.register_callback(BrickletDistanceUS::CALLBACK_DISTANCE) do |distance|
   puts "Distance Value: #{distance}"
 end
+
+# Set period for distance value callback to 0.2s (200ms)
+# Note: The distance value callback is only called every 0.2 seconds
+#       if the distance value has changed since the last call!
+dus.set_distance_callback_period 200
 
 puts 'Press key to exit'
 $stdin.gets

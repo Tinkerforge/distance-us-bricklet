@@ -42,13 +42,13 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
+  { Register distance value callback to procedure DistanceCB }
+  dus.OnDistance := {$ifdef FPC}@{$endif}DistanceCB;
+
   { Set period for distance value callback to 0.2s (200ms)
     Note: The distance value callback is only called every 0.2 seconds
           if the distance value has changed since the last call! }
   dus.SetDistanceCallbackPeriod(200);
-
-  { Register distance value callback to procedure DistanceCB }
-  dus.OnDistance := {$ifdef FPC}@{$endif}DistanceCB;
 
   WriteLn('Press key to exit');
   ReadLn;

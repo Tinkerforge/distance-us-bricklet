@@ -24,7 +24,7 @@ var
   e: TExample;
 
 procedure TExample.Execute;
-var distanceValue: word;
+var distance: word;
 begin
   { Create IP connection }
   ipcon := TIPConnection.Create;
@@ -37,8 +37,8 @@ begin
   { Don't use device before ipcon is connected }
 
   { Get current distance value }
-  distanceValue := dus.GetDistanceValue;
-  WriteLn(Format('Distance Value: %d', [distanceValue]));
+  distance := dus.GetDistanceValue;
+  WriteLn(Format('Distance Value: %d', [distance]));
 
   WriteLn('Press key to exit');
   ReadLn;

@@ -1,3 +1,4 @@
+using System;
 using Tinkerforge;
 
 class Example
@@ -15,11 +16,11 @@ class Example
 		// Don't use device before ipcon is connected
 
 		// Get current distance value
-		int distanceValue = dus.GetDistanceValue();
-		System.Console.WriteLine("Distance Value: " + distanceValue);
+		int distance = dus.GetDistanceValue();
+		Console.WriteLine("Distance Value: " + distance);
 
-		System.Console.WriteLine("Press enter to exit");
-		System.Console.ReadLine();
+		Console.WriteLine("Press enter to exit");
+		Console.ReadLine();
 		ipcon.Disconnect();
 	}
 }

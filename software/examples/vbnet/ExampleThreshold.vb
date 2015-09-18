@@ -1,3 +1,4 @@
+Imports System
 Imports Tinkerforge
 
 Module ExampleThreshold
@@ -5,9 +6,9 @@ Module ExampleThreshold
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change to your UID
 
-    ' Callback function for distance value smaller than 200
+    ' Callback subroutine for distance value reached callback
     Sub DistanceReachedCB(ByVal sender As BrickletDistanceUS, ByVal distance As Integer)
-        System.Console.WriteLine("Distance Value: " + distance.ToString())
+        Console.WriteLine("Distance Value: " + distance.ToString())
     End Sub
 
     Sub Main()
@@ -20,14 +21,14 @@ Module ExampleThreshold
         ' Get threshold callbacks with a debounce time of 10 seconds (10000ms)
         dus.SetDebouncePeriod(10000)
 
-        ' Register threshold reached callback to function DistanceReachedCB
+        ' Register distance value reached callback to subroutine DistanceReachedCB
         AddHandler dus.DistanceReached, AddressOf DistanceReachedCB
 
-        ' Configure threshold for "smaller than 200"
+        ' Configure threshold for distance "smaller than 200"
         dus.SetDistanceCallbackThreshold("<"C, 200, 0)
 
-        System.Console.WriteLine("Press key to exit")
-        System.Console.ReadLine()
+        Console.WriteLine("Press key to exit")
+        Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module

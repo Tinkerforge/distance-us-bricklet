@@ -31,23 +31,23 @@
                     ipcon.disconnect();
                 }
                 ipcon = new Tinkerforge.IPConnection(); // Create IP connection
-                var dist = new Tinkerforge.BrickletDistanceUS(UID, ipcon); // Create device object
+                var dus = new Tinkerforge.BrickletDistanceUS(UID, ipcon); // Create device object
                 ipcon.connect(HOST, PORT,
                     function(error) {
-                        textArea.value += 'Error: '+error+ '\n';
+                        textArea.value += 'Error: ' + error + '\n';
                     }
                 ); // Connect to brickd
                 // Don't use device before ipcon is connected
 
                 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
-                    function(connectReason) {
+                    function (connectReason) {
                         // Get current distance value
-                        dist.getDistanceValue(
-                            function(distance) {
-                                textArea.value += 'Distance: '+distance+'\n';
+                        dus.getDistanceValue(
+                            function (distance) {
+                                textArea.value += 'Distance Value: ' + distance + '\n';
                             },
-                            function(error) {
-                                textArea.value += 'Error: '+error+'\n';
+                            function (error) {
+                                textArea.value += 'Error: ' + error + '\n';
                             }
                         );
                     }

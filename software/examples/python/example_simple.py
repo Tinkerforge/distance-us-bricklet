@@ -16,8 +16,8 @@ if __name__ == "__main__":
     # Don't use device before ipcon is connected
 
     # Get current distance value
-    distance_value = dus.get_distance_value()
-    print('Distance Value: ' + str(distance_value))
+    distance = dus.get_distance_value()
+    print("Distance Value: " + str(distance))
 
-    raw_input('Press key to exit\n') # Use input() in Python 3
+    raw_input("Press key to exit\n") # Use input() in Python 3
     ipcon.disconnect()
