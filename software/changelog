@@ -1,8 +1,8 @@
-2.0.0:
+2013-11-27: 2.0.0 (0050631)
 - Initial version
 
-2.0.1:
+2013-12-19: 2.0.1 (3b3b87a)
 - Fix wrong length for GetDebounce packet (through brickletlib)
 
-2.0.2:
+2014-01-06: 2.0.2 (3298ed6)
 - Reorder elements in BrickContext to satisfy 256 byte size limit
