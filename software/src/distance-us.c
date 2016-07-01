@@ -99,7 +99,7 @@ void constructor(void) {
 
 	BC->moving_average_sum = 0;
 	BC->moving_average_tick = 0;
-	BC->moving_average_num = MOVING_AVERAGE_DEFAULT;
+	BC->moving_average_num = -MOVING_AVERAGE_DEFAULT;
 	for(uint8_t i = 0; i < MOVING_AVERAGE_MAX; i++) {
 		BC->moving_average[i] = 0;
 	}
@@ -156,15 +156,36 @@ int32_t distance_from_analog_value(const int32_t value) {
 				PIN_DEPLEATE_CAP.type = PIO_OUTPUT_1;
 				BA->PIO_Configure(&PIN_DEPLEATE_CAP, 1);
 
-				if (BC->moving_average_num > 0) {
+				if (BC->moving_average_num != 0) {
 					BC->moving_average_sum = BC->moving_average_sum -
 					                         BC->moving_average[BC->moving_average_tick] +
 					                         analog_data;
 
 					BC->moving_average[BC->moving_average_tick] = analog_data;
-					BC->moving_average_tick = (BC->moving_average_tick + 1) % BC->moving_average_num;
 
-					ret_value = (BC->moving_average_sum + BC->moving_average_num/2)/BC->moving_average_num;
+					uint8_t moving_average_num;
+					uint8_t moving_average_used;
+
+					if (BC->moving_average_num < 0) {
+						// no full history yet
+						moving_average_num = -BC->moving_average_num;
+
+						if (BC->moving_average_tick + 1 == moving_average_num) {
+							// make positive to indicate full history
+							BC->moving_average_num = -BC->moving_average_num;
+						}
+
+						// use history up to tick, tick hasn't wrapped around yet
+						moving_average_used = BC->moving_average_tick + 1;
+					} else {
+						// have full fistory
+						moving_average_num = BC->moving_average_num;
+						moving_average_used = BC->moving_average_num;
+					}
+
+					BC->moving_average_tick = (BC->moving_average_tick + 1) % moving_average_num;
+
+					ret_value = (BC->moving_average_sum + moving_average_used / 2) / moving_average_used;
 				} else {
 					ret_value = analog_data;
 				}
@@ -191,6 +212,13 @@ void set_moving_average(const ComType com, const SetMovingAverage *data) {
 	BC->moving_average_num = data->average;
 	if(BC->moving_average_num > MOVING_AVERAGE_MAX) {
 		BC->moving_average_num = MOVING_AVERAGE_MAX;
+	}
+
+	BC->moving_average_sum = 0;
+	BC->moving_average_tick = 0;
+	BC->moving_average_num = -BC->moving_average_num;
+	for(uint8_t i = 0; i < MOVING_AVERAGE_MAX; i++) {
+		BC->moving_average[i] = 0;
 	}
 
 	BA->com_return_setter(com, data);

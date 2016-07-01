@@ -31,7 +31,7 @@
 
 #define BRICKLET_FIRMWARE_VERSION_MAJOR 2
 #define BRICKLET_FIRMWARE_VERSION_MINOR 0
-#define BRICKLET_FIRMWARE_VERSION_REVISION 2
+#define BRICKLET_FIRMWARE_VERSION_REVISION 3
 
 #define BRICKLET_HARDWARE_VERSION_MAJOR 1
 #define BRICKLET_HARDWARE_VERSION_MINOR 0
@@ -78,7 +78,7 @@ typedef struct {
 	uint16_t moving_average[MOVING_AVERAGE_MAX];
 
 	uint16_t last_distance_value;
-	uint8_t moving_average_num;
+	int8_t moving_average_num; // context is full, use sign to indicate if history is full yet
 	uint8_t moving_average_tick;
 
 	char threshold_option_save[NUM_SIMPLE_VALUES];

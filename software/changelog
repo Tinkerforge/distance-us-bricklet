@@ -6,3 +6,6 @@
 
 2014-01-06: 2.0.2 (3298ed6)
 - Reorder elements in BrickContext to satisfy 256 byte size limit
+
+2016-07-01: 2.0.3 (<unknown>)
+- Add missing moving average reinitialization on length change
