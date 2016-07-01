@@ -5,7 +5,7 @@
 
 #define HOST "localhost"
 #define PORT 4223
-#define UID "XYZ" // Change to your UID
+#define UID "XYZ" // Change XYZ to the UID of your Distance US Bricklet
 
 // Callback function for distance value reached callback
 void cb_distance_reached(uint16_t distance, void *user_data) {

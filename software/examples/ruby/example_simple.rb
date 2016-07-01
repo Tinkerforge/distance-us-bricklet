@@ -8,7 +8,7 @@ include Tinkerforge
 
 HOST = 'localhost'
 PORT = 4223
-UID = 'XYZ' # Change to your UID
+UID = 'XYZ' # Change XYZ to the UID of your Distance US Bricklet
 
 ipcon = IPConnection.new # Create IP connection
 dus = BrickletDistanceUS.new UID, ipcon # Create device object

@@ -8,7 +8,7 @@ use Tinkerforge\BrickletDistanceUS;
 
 const HOST = 'localhost';
 const PORT = 4223;
-const UID = 'XYZ'; // Change to your UID
+const UID = 'XYZ'; // Change XYZ to the UID of your Distance US Bricklet
 
 // Callback function for distance value callback
 function cb_distance($distance)

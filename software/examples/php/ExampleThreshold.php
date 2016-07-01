@@ -8,7 +8,7 @@ use Tinkerforge\BrickletDistanceUS;
 
 const HOST = 'localhost';
 const PORT = 4223;
-const UID = 'XYZ'; // Change to your UID
+const UID = 'XYZ'; // Change XYZ to the UID of your Distance US Bricklet
 
 // Callback function for distance value reached callback
 function cb_distanceReached($distance)
@@ -26,7 +26,8 @@ $ipcon->connect(HOST, PORT); // Connect to brickd
 $dus->setDebouncePeriod(10000);
 
 // Register distance value reached callback to function cb_distanceReached
-$dus->registerCallback(BrickletDistanceUS::CALLBACK_DISTANCE_REACHED, 'cb_distanceReached');
+$dus->registerCallback(BrickletDistanceUS::CALLBACK_DISTANCE_REACHED,
+                       'cb_distanceReached');
 
 // Configure threshold for distance value "smaller than 200"
 $dus->setDistanceCallbackThreshold('<', 200, 0);
