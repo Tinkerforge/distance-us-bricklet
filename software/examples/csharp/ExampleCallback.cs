@@ -22,7 +22,7 @@ class Example
 		// Don't use device before ipcon is connected
 
 		// Register distance value callback to function DistanceCB
-		dus.Distance += DistanceCB;
+		dus.DistanceCallback += DistanceCB;
 
 		// Set period for distance value callback to 0.2s (200ms)
 		// Note: The distance value callback is only called every 0.2 seconds

@@ -25,7 +25,7 @@ class Example
 		dus.SetDebouncePeriod(10000);
 
 		// Register distance value reached callback to function DistanceReachedCB
-		dus.DistanceReached += DistanceReachedCB;
+		dus.DistanceReachedCallback += DistanceReachedCB;
 
 		// Configure threshold for distance value "smaller than 200"
 		dus.SetDistanceCallbackThreshold('<', 200, 0);
