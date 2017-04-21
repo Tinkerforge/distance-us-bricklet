@@ -10,7 +10,7 @@ tinkerforge call distance-us-bricklet $uid set-debounce-period 10000
 tinkerforge dispatch distance-us-bricklet $uid distance-reached &
 
 # Configure threshold for distance value "smaller than 200"
-tinkerforge call distance-us-bricklet $uid set-distance-callback-threshold smaller 200 0
+tinkerforge call distance-us-bricklet $uid set-distance-callback-threshold threshold-option-smaller 200 0
 
 echo "Press key to exit"; read dummy
 
