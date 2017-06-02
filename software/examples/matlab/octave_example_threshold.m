@@ -5,8 +5,8 @@ function octave_example_threshold()
     PORT = 4223;
     UID = "XYZ"; % Change XYZ to the UID of your Distance US Bricklet
 
-    ipcon = java_new("com.tinkerforge.IPConnection"); % Create IP connection
-    dus = java_new("com.tinkerforge.BrickletDistanceUS", UID, ipcon); % Create device object
+    ipcon = javaObject("com.tinkerforge.IPConnection"); % Create IP connection
+    dus = javaObject("com.tinkerforge.BrickletDistanceUS", UID, ipcon); % Create device object
 
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected
