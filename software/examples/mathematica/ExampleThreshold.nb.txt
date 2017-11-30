@@ -16,7 +16,7 @@ dus@SetDebouncePeriod[10000]
 (*Callback function for distance value reached callback*)
 DistanceReachedCB[sender_,distance_]:=
  Print["Distance Value: "<>ToString[distance]]
-AddEventHandler[dus@DistanceReached,DistanceReachedCB]
+AddEventHandler[dus@DistanceReachedCallback,DistanceReachedCB]
 
 (*Configure threshold for distance value "smaller than 200"*)
 option=Tinkerforge`BrickletDistanceUS`THRESHOLDUOPTIONUSMALLER

@@ -13,7 +13,7 @@ ipcon@Connect[host,port]
 (*Callback function for distance value callback*)
 DistanceCB[sender_,distance_]:=
  Print["Distance Value: "<>ToString[distance]]
-AddEventHandler[dus@Distance,DistanceCB]
+AddEventHandler[dus@DistanceCallback,DistanceCB]
 
 (*Set period for distance value callback to 0.2s (200ms)*)
 (*Note: The distance value callback is only called every 0.2 seconds*)

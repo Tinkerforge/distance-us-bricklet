@@ -22,7 +22,7 @@ Module ExampleThreshold
         dus.SetDebouncePeriod(10000)
 
         ' Register distance value reached callback to subroutine DistanceReachedCB
-        AddHandler dus.DistanceReached, AddressOf DistanceReachedCB
+        AddHandler dus.DistanceReachedCallback, AddressOf DistanceReachedCB
 
         ' Configure threshold for distance "smaller than 200"
         dus.SetDistanceCallbackThreshold("<"C, 200, 0)
