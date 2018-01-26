@@ -30,7 +30,7 @@ int main(void) {
 		return 1;
 	}
 
-	printf("Distance Value: %d\n", distance);
+	printf("Distance Value: %u\n", distance);
 
 	printf("Press key to exit\n");
 	getchar();

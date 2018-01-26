@@ -11,7 +11,7 @@
 void cb_distance_reached(uint16_t distance, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("Distance Value: %d\n", distance);
+	printf("Distance Value: %u\n", distance);
 }
 
 int main(void) {
