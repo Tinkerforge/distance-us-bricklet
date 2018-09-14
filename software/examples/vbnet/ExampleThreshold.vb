@@ -24,7 +24,7 @@ Module ExampleThreshold
         ' Register distance value reached callback to subroutine DistanceReachedCB
         AddHandler dus.DistanceReachedCallback, AddressOf DistanceReachedCB
 
-        ' Configure threshold for distance "smaller than 200"
+        ' Configure threshold for distance value "smaller than 200"
         dus.SetDistanceCallbackThreshold("<"C, 200, 0)
 
         Console.WriteLine("Press key to exit")
