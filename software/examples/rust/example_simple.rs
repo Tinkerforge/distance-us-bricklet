@@ -1,20 +1,20 @@
 use std::{error::Error, io};
 
-use tinkerforge::{distance_us_bricklet::*, ipconnection::IpConnection};
+use tinkerforge::{distance_us_bricklet::*, ip_connection::IpConnection};
 
-const HOST: &str = "127.0.0.1";
+const HOST: &str = "localhost";
 const PORT: u16 = 4223;
-const UID: &str = "XYZ"; // Change XYZ to the UID of your Distance US Bricklet
+const UID: &str = "XYZ"; // Change XYZ to the UID of your Distance US Bricklet.
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let ipcon = IpConnection::new(); // Create IP connection
-    let distance_us_bricklet = DistanceUSBricklet::new(UID, &ipcon); // Create device object
+    let ipcon = IpConnection::new(); // Create IP connection.
+    let dus = DistanceUsBricklet::new(UID, &ipcon); // Create device object.
 
-    ipcon.connect(HOST, PORT).recv()??; // Connect to brickd
-                                        // Don't use device before ipcon is connected
+    ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
+                                          // Don't use device before ipcon is connected.
 
-    // Get current distance value
-    let distance = distance_us_bricklet.get_distance_value().recv()?;
+    // Get current distance value.
+    let distance = dus.get_distance_value().recv()?;
     println!("Distance Value: {}", distance);
 
     println!("Press enter to exit.");

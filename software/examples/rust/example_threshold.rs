@@ -1,32 +1,33 @@
 use std::{error::Error, io, thread};
-use tinkerforge::{distance_us_bricklet::*, ipconnection::IpConnection};
+use tinkerforge::{distance_us_bricklet::*, ip_connection::IpConnection};
 
-const HOST: &str = "127.0.0.1";
+const HOST: &str = "localhost";
 const PORT: u16 = 4223;
-const UID: &str = "XYZ"; // Change XYZ to the UID of your Distance US Bricklet
+const UID: &str = "XYZ"; // Change XYZ to the UID of your Distance US Bricklet.
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let ipcon = IpConnection::new(); // Create IP connection
-    let distance_us_bricklet = DistanceUSBricklet::new(UID, &ipcon); // Create device object
+    let ipcon = IpConnection::new(); // Create IP connection.
+    let dus = DistanceUsBricklet::new(UID, &ipcon); // Create device object.
 
-    ipcon.connect(HOST, PORT).recv()??; // Connect to brickd
-                                        // Don't use device before ipcon is connected
+    ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
+                                          // Don't use device before ipcon is connected.
 
-    // Get threshold listeners with a debounce time of 10 seconds (10000ms)
-    distance_us_bricklet.set_debounce_period(10000);
+    // Get threshold receivers with a debounce time of 10 seconds (10000ms).
+    dus.set_debounce_period(10000);
 
-    //Create listener for distance value reached events.
-    let distance_reached_listener = distance_us_bricklet.get_distance_reached_receiver();
-    // Spawn thread to handle received events. This thread ends when the distance_us_bricklet
+    // Create receiver for distance value reached events.
+    let distance_reached_receiver = dus.get_distance_reached_receiver();
+
+    // Spawn thread to handle received events. This thread ends when the `dus` object
     // is dropped, so there is no need for manual cleanup.
     thread::spawn(move || {
-        for event in distance_reached_listener {
-            println!("Distance Value: {}", event);
+        for distance_reached in distance_reached_receiver {
+            println!("Distance Value: {}", distance_reached);
         }
     });
 
-    // Configure threshold for distance value "smaller than 200"
-    distance_us_bricklet.set_distance_callback_threshold('<', 200, 0);
+    // Configure threshold for distance value "smaller than 200".
+    dus.set_distance_callback_threshold('<', 200, 0);
 
     println!("Press enter to exit.");
     let mut _input = String::new();
