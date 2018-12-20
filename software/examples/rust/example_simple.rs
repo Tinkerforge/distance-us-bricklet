@@ -1,6 +1,8 @@
-use std::{error::Error, io};
+use std::{io, error::Error};
 
-use tinkerforge::{distance_us_bricklet::*, ip_connection::IpConnection};
+use tinkerforge::{ip_connection::IpConnection, 
+                  distance_us_bricklet::*};
+
 
 const HOST: &str = "localhost";
 const PORT: u16 = 4223;
@@ -11,11 +13,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let dus = DistanceUsBricklet::new(UID, &ipcon); // Create device object.
 
     ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
-                                          // Don't use device before ipcon is connected.
+    // Don't use device before ipcon is connected.
 
-    // Get current distance value.
-    let distance = dus.get_distance_value().recv()?;
-    println!("Distance Value: {}", distance);
+		// Get current distance value.
+let distance = dus.get_distance_value().recv()?;
+		println!("Distance Value: {}", distance);
 
     println!("Press enter to exit.");
     let mut _input = String::new();
