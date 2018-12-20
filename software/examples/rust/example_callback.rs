@@ -1,8 +1,5 @@
-use std::{io, error::Error};
-use std::thread;
-use tinkerforge::{ip_connection::IpConnection, 
-                  distance_us_bricklet::*};
-
+use std::{error::Error, io, thread};
+use tinkerforge::{distance_us_bricklet::*, ip_connection::IpConnection};
 
 const HOST: &str = "localhost";
 const PORT: u16 = 4223;
@@ -13,23 +10,23 @@ fn main() -> Result<(), Box<dyn Error>> {
     let dus = DistanceUsBricklet::new(UID, &ipcon); // Create device object.
 
     ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
-    // Don't use device before ipcon is connected.
+                                          // Don't use device before ipcon is connected.
 
-     let distance_receiver = dus.get_distance_callback_receiver();
+    let distance_receiver = dus.get_distance_callback_receiver();
 
-        // Spawn thread to handle received callback messages. 
-        // This thread ends when the `dus` object
-        // is dropped, so there is no need for manual cleanup.
-        thread::spawn(move || {
-            for distance in distance_receiver {           
-                		println!("Distance Value: {}", distance);
-            }
-        });
+    // Spawn thread to handle received callback messages.
+    // This thread ends when the `dus` object
+    // is dropped, so there is no need for manual cleanup.
+    thread::spawn(move || {
+        for distance in distance_receiver {
+            println!("Distance Value: {}", distance);
+        }
+    });
 
-		// Set period for distance value receiver to 0.2s (200ms).
-		// Note: The distance value callback is only called every 0.2 seconds
-		//       if the distance value has changed since the last call!
-		dus.set_distance_callback_period(200);
+    // Set period for distance value receiver to 0.2s (200ms).
+    // Note: The distance value callback is only called every 0.2 seconds
+    //       if the distance value has changed since the last call!
+    dus.set_distance_callback_period(200);
 
     println!("Press enter to exit.");
     let mut _input = String::new();
