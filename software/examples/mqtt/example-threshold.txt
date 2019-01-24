@@ -1,0 +1,12 @@
+
+
+# Change XYZ to the UID of your Distance US Bricklet
+
+setup:
+	# Get threshold callbacks with a debounce time of 10 seconds (10000ms)
+	publish '{"debounce": 10000}' to tinkerforge/request/distance-us_bricklet/XYZ/set_debounce_period
+	# Handle incoming distance value reached callbacks
+	subscribe to tinkerforge/callback/distance_us_bricklet/XYZ/distance_reached
+	publish '{"register": true}' to tinkerforge/register/distance_us_bricklet/XYZ/distance_reached # Register distance_reached callback
+	# Configure threshold for distance value "smaller than 200"
+	publish '{"option": "smaller", "min_distance": 200, "max_distance": 0}' to tinkerforge/request/distance_us_bricklet/XYZ/set_distance_callback_threshold
