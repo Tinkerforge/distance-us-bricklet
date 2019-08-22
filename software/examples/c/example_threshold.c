@@ -36,7 +36,7 @@ int main(void) {
 	// Register distance value reached callback to function cb_distance_reached
 	distance_us_register_callback(&dus,
 	                              DISTANCE_US_CALLBACK_DISTANCE_REACHED,
-	                              (void *)cb_distance_reached,
+	                              (void (*)(void))cb_distance_reached,
 	                              NULL);
 
 	// Configure threshold for distance value "smaller than 200"
