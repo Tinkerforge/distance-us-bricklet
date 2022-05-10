@@ -20,7 +20,7 @@ func main() {
 
 	// Get current distance value.
 	distance, _ := dus.GetDistanceValue()
-	fmt.Printf("Distance Value: \n", distance)
+	fmt.Printf("Distance Value: %d\n", distance)
 
 	fmt.Print("Press enter to exit.")
 	fmt.Scanln()
